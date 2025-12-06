@@ -1,127 +1,267 @@
-<!-- START OF DEMO QUIZ -->
-<div id="mobile-quiz-container" style="font-family: sans-serif; width: 100%; max-width: 500px; margin: 0 auto; background: #fff; border: 1px solid #ddd; border-radius: 10px; padding: 15px; box-sizing: border-box;">
+<div id="master-quiz-parts" style="width: 100%; max-width: 600px; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); font-family: sans-serif; overflow: hidden; border: 1px solid #e0e0e0;">
 
-    <!-- STYLE -->
+    <!-- CSS STYLES -->
     <style>
-        /* सारे बटन एक के नीचे एक (Vertical) */
-        .full-btn {
-            display: block;        /* ब्लॉक मतलब पूरी लाइन */
-            width: 100%;           /* 100% चौड़ाई */
-            padding: 15px;         /* मोटा बटन */
-            margin: 10px 0;        /* बटनों के बीच गैप */
-            font-size: 16px;
-            border: none;
-            border-radius: 8px;
-            color: white;
-            cursor: pointer;
-            text-align: left;      /* टेक्स्ट बाईं तरफ */
-            box-sizing: border-box;
-        }
-
-        /* ऑप्शन्स की स्टाइल */
-        .opt-btn {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            background: #f1f1f1;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            text-align: left;
-            font-size: 15px;
-            cursor: pointer;
-        }
-
-        /* कलर्स */
-        .c-his { background: #e74c3c; border-bottom: 4px solid #c0392b; }
-        .c-geo { background: #2ecc71; border-bottom: 4px solid #27ae60; }
-        .c-civ { background: #3498db; border-bottom: 4px solid #2980b9; }
-        .c-eco { background: #f1c40f; color: #000; border-bottom: 4px solid #f39c12; }
+        .hide-screen { display: none !important; }
+        .full-btn { width: 100%; padding: 14px; margin: 8px 0; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; text-align: left; position: relative; transition: 0.2s; }
+        .full-btn:active { transform: scale(0.98); }
         
-        .correct { background: #d4edda !important; border-color: #c3e6cb !important; }
-        .wrong { background: #f8d7da !important; border-color: #f5c6cb !important; }
-        .hide { display: none; }
+        /* Subject Buttons */
+        .b-his { background: #ffebee; color: #c62828; border-left: 6px solid #c62828; }
+        .b-geo { background: #e8f5e9; color: #2e7d32; border-left: 6px solid #2e7d32; }
+        .b-civ { background: #e3f2fd; color: #1565c0; border-left: 6px solid #1565c0; }
+        .b-eco { background: #fff8e1; color: #f57f17; border-left: 6px solid #f57f17; }
+
+        /* Part Buttons */
+        .btn-part { background: #f5f5f5; color: #333; border: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; }
+        .btn-part:hover { background: #eee; }
+        .badge { background: #333; color: #fff; padding: 2px 8px; border-radius: 10px; font-size: 12px; }
+
+        /* Quiz Options */
+        .opt-btn { background: #fff; border: 2px solid #eee; color: #444; margin-bottom: 10px; }
+        .correct { background: #d4edda !important; border-color: #28a745 !important; color: #155724 !important; }
+        .wrong { background: #f8d7da !important; border-color: #dc3545 !important; color: #721c24 !important; }
+
+        /* Navigation */
+        .nav-box { display: flex; gap: 10px; margin-top: 15px; }
+        .nav-btn { flex: 1; padding: 12px; border: none; border-radius: 5px; color: white; font-weight: bold; cursor: pointer; font-size: 14px; }
+        .n-prev { background: #757575; }
+        .n-next { background: #007bff; }
+        .n-sub { background: #28a745; }
     </style>
 
-    <!-- SCREEN 1: होम (विषय चुनें) -->
-    <div id="screen-home">
-        <h3 style="text-align: center; color: #d9534f; margin-top: 0;">विषय चुनें (Demo)</h3>
+    <!-- 1. HOME SCREEN (Subject Selection) -->
+    <div id="screen-1" style="padding: 20px; text-align: center;">
+        <h2 style="color: #d9534f; margin-top: 0;">📚 प्रश्न बैंक 2026</h2>
+        <p style="color: #666; font-size: 14px;">विषय चुनें (Select Subject):</p>
         
-        <!-- बटन एक के नीचे एक -->
-        <button class="full-btn c-his" onclick="startDemo('history')">1. इतिहास (History)</button>
-        <button class="full-btn c-geo" onclick="startDemo('geography')">2. भूगोल (Geography)</button>
-        <button class="full-btn c-civ" onclick="startDemo('civics')">3. राजनीति (Civics)</button>
-        <button class="full-btn c-eco" onclick="startDemo('economics')">4. अर्थशास्त्र (Economics)</button>
+        <button class="full-btn b-his" onclick="openParts('history')">📜 इतिहास (History)</button>
+        <button class="full-btn b-geo" onclick="openParts('geography')">🌍 भूगोल (Geography)</button>
+        <button class="full-btn b-civ" onclick="openParts('civics')">🏛️ राजनीति (Civics)</button>
+        <button class="full-btn b-eco" onclick="openParts('economics')">💰 अर्थशास्त्र (Economics)</button>
     </div>
 
-    <!-- SCREEN 2: क्विज़ -->
-    <div id="screen-quiz" class="hide">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 10px; color: #888; font-size: 14px;">
-            <span id="sub-name">Subject</span>
-            <span>Demo Question</span>
-        </div>
-
-        <h3 id="q-text" style="margin: 0 0 15px 0; font-size: 18px;">Question?</h3>
-        
-        <div id="opt-box">
-            <!-- ऑप्शन्स यहाँ आएंगे -->
-        </div>
-
-        <div id="msg-box" style="margin-top: 10px; font-weight: bold; height: 20px;"></div>
-        
-        <button onclick="location.reload()" style="margin-top: 20px; padding: 10px; width: 100%; background: #333; color: #fff; border: none; border-radius: 5px;">Back to Home</button>
+    <!-- 2. PART SELECTION (Set 1, Set 2...) -->
+    <div id="screen-2" class="hide-screen" style="padding: 20px;">
+        <button onclick="goHome()" style="background:none; border:none; font-size:20px; cursor:pointer;">⬅️ Back</button>
+        <h3 style="text-align: center; margin-top: 5px; color: #333;">सेट चुनें (Select Part)</h3>
+        <div id="parts-list"></div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- 3. QUIZ SCREEN -->
+    <div id="screen-3" class="hide-screen" style="padding: 15px;">
+        <div style="display: flex; justify-content: space-between; font-size: 13px; color: #888; margin-bottom: 15px;">
+            <span id="quiz-title" style="font-weight:bold;">Part Name</span>
+            <span id="q-progress">1/20</span>
+        </div>
+
+        <div id="q-text" style="font-size: 18px; font-weight: bold; margin-bottom: 20px; line-height: 1.5;">Question?</div>
+        <div id="options-box"></div>
+        <div id="status-msg" style="height: 20px; text-align: center; font-weight: bold; margin-top: 10px;"></div>
+
+        <div class="nav-box">
+            <button class="nav-btn n-prev" onclick="prevQ()">⬅️ Prev</button>
+            <button class="nav-btn n-sub" onclick="submitQuiz()">✅ Submit</button>
+            <button class="nav-btn n-next" onclick="nextQ()">Next ➡️</button>
+        </div>
+    </div>
+
+    <!-- 4. RESULT SCREEN -->
+    <div id="screen-4" class="hide-screen" style="padding: 20px; text-align: center;">
+        <h2 style="color: #2e7d32;">🎉 परिणाम (Result)</h2>
+        <div style="background: #f1f8e9; padding: 20px; border-radius: 10px; margin: 15px 0;">
+            <h1 style="margin: 0; font-size: 40px; color: #333;">
+                <span id="final-score">0</span> / <span id="total-qs">20</span>
+            </h1>
+            <p style="margin: 5px 0; color: #555;">Correct Answers</p>
+        </div>
+        
+        <button class="full-btn" style="background: #25D366; color: white; text-align: center;" onclick="shareWA()">📲 WhatsApp पर भेजें</button>
+        <button class="full-btn" style="background: #333; color: white; text-align: center;" onclick="location.reload()">🔄 फिर से करें (Restart)</button>
+
+        <div style="text-align: left; margin-top: 20px;">
+            <h4 style="color: #d9534f; border-bottom: 2px solid #eee; padding-bottom: 5px;">❌ गलत उत्तरों की जाँच:</h4>
+            <div id="review-list"></div>
+        </div>
+    </div>
+
+    <!-- SOUNDS -->
+    <audio id="aud-cor" src="https://actions.google.com/sounds/v1/cartoon/pop.ogg"></audio>
+    <audio id="aud-wro" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+
+    <!-- LOGIC -->
     <script>
-        // डेमो डेटा (सिर्फ 1-1 सवाल)
-        var demoData = {
-            history: { q: "गैरीबाल्डी पेशे से क्या था?", o: ["सिपाही", "किसान", "जमींदार", "नाविक"], a: 3 },
-            geography: { q: "काली मृदा का दूसरा नाम क्या है?", o: ["बलुई", "रेगुर", "लाल", "पर्वतीय"], a: 1 },
-            civics: { q: "ग्राम कचहरी का प्रधान कौन होता है?", o: ["पंच", "सरपंच", "प्रमुख", "न्यायमित्र"], a: 1 },
-            economics: { q: "भारत की वितीय राजधानी किसे कहते हैं?", o: ["मुंबई", "दिल्ली", "पटना", "बैंगलोर"], a: 0 }
+        // --- DATA SECTION: 20-20 QUESTIONS HERE ---
+        const db = {
+            history: [
+                {
+                    name: "Part-1 (Set 1)", 
+                    qs: [
+                        // यहाँ 20 प्रश्न डालें
+                        { q: "1. रक्त और लौह की नीति किसने अपनाई?", o: ["मेजिनी", "हिटलर", "बिस्मार्क", "नेपोलियन"], a: 2 },
+                        { q: "2. फ्रैंकफर्ट की संधि कब हुई?", o: ["1864", "1866", "1870", "1871"], a: 3 },
+                        { q: "3. रूस में कृषक दास प्रथा का अंत कब हुआ?", o: ["1861", "1862", "1863", "1864"], a: 0 }
+                        // ... और प्रश्न जोड़ें (कॉपी-पेस्ट करें)
+                    ]
+                },
+                {
+                    name: "Part-2 (Set 2)", 
+                    qs: [
+                        { q: "1. बोलशेविक क्रांति कब हुई?", o: ["फरवरी 1917", "नवंबर 1917", "अप्रैल 1917", "1905"], a: 1 },
+                        { q: "2. हिंदचीन पहुँचने वाले प्रथम व्यापारी कौन थे?", o: ["अंग्रज", "फ्रांसीसी", "पुर्तगाली", "डच"], a: 2 }
+                        // यहाँ अपने 20 प्रश्न डालें
+                    ]
+                }
+            ],
+            geography: [
+                {
+                    name: "Part-1 (Set 1)",
+                    qs: [
+                        { q: "1. कोयला किस प्रकार का संसाधन है?", o: ["अनवीकरणीय", "नवीकरणीय", "जैव", "अजैव"], a: 0 },
+                        { q: "2. काली मृदा का दूसरा नाम क्या है?", o: ["बलुई", "रेगुर", "लाल", "पर्वतीय"], a: 1 }
+                    ]
+                }
+            ],
+            civics: [],
+            economics: []
         };
 
-        function startDemo(sub) {
-            var data = demoData[sub];
-            
-            // स्क्रीन बदलें
-            document.getElementById('screen-home').classList.add('hide');
-            document.getElementById('screen-quiz').classList.remove('hide');
-            document.getElementById('sub-name').innerText = sub.toUpperCase();
+        // --- VARIABLES ---
+        let currentSet = [];
+        let qIdx = 0;
+        let userAns = {}; // To store answers
+        
+        function openParts(sub) {
+            let list = document.getElementById('parts-list');
+            list.innerHTML = "";
+            let data = db[sub];
+
+            if(!data || data.length === 0) { alert("Questions coming soon!"); return; }
+
+            data.forEach((part, index) => {
+                let btn = document.createElement('button');
+                btn.className = 'full-btn btn-part';
+                btn.innerHTML = `<span>${part.name}</span> <span class="badge">${part.qs.length} Qs</span>`;
+                btn.onclick = () => startTest(sub, index);
+                list.appendChild(btn);
+            });
+
+            show('screen-2');
+        }
+
+        function startTest(sub, partIndex) {
+            currentSet = db[sub][partIndex].qs;
+            qIdx = 0;
+            userAns = {};
+            document.getElementById('quiz-title').innerText = db[sub][partIndex].name;
+            show('screen-3');
+            loadQ();
+        }
+
+        function loadQ() {
+            let data = currentSet[qIdx];
+            document.getElementById('q-progress').innerText = (qIdx + 1) + " / " + currentSet.length;
             document.getElementById('q-text').innerText = data.q;
-            document.getElementById('msg-box').innerText = "";
+            document.getElementById('status-msg').innerText = "";
 
-            // ऑप्शन्स बनाएं
-            var box = document.getElementById('opt-box');
-            box.innerHTML = ""; // पुराना हटाएं
+            let box = document.getElementById('options-box');
+            box.innerHTML = "";
 
-            data.o.forEach((opt, index) => {
-                var btn = document.createElement('button');
-                btn.className = 'opt-btn'; // यह क्लास बटन को एक के नीचे एक रखेगी
+            data.o.forEach((opt, i) => {
+                let btn = document.createElement('button');
+                btn.className = 'full-btn opt-btn';
                 btn.innerText = opt;
-                btn.onclick = function() { checkDemo(index, btn, data.a); };
+                
+                // If answered already
+                if(userAns[qIdx] !== undefined) {
+                    btn.disabled = true;
+                    if(i === data.a) btn.classList.add('correct');
+                    if(userAns[qIdx] === i && i !== data.a) btn.classList.add('wrong');
+                } else {
+                    btn.onclick = () => check(i, btn, data.a);
+                }
                 box.appendChild(btn);
             });
         }
 
-        function checkDemo(userIndex, btnElement, correctIndex) {
-            // बटन लॉक करें
-            var all = document.querySelectorAll('.opt-btn');
+        function check(sel, btn, cor) {
+            userAns[qIdx] = sel;
+            let all = document.querySelectorAll('.opt-btn');
             all.forEach(b => b.disabled = true);
 
-            if (userIndex === correctIndex) {
-                btnElement.classList.add('correct');
-                document.getElementById('msg-box').innerText = "✅ सही जवाब!";
-                document.getElementById('msg-box').style.color = "green";
+            if(sel === cor) {
+                btn.classList.add('correct');
+                playSound('aud-cor');
+                document.getElementById('status-msg').innerText = "✅ सही!";
+                document.getElementById('status-msg').style.color = "green";
             } else {
-                btnElement.classList.add('wrong');
-                all[correctIndex].classList.add('correct');
-                document.getElementById('msg-box').innerText = "❌ गलत जवाब!";
-                document.getElementById('msg-box').style.color = "red";
+                btn.classList.add('wrong');
+                all[cor].classList.add('correct');
+                playSound('aud-wro');
+                document.getElementById('status-msg').innerText = "❌ गलत!";
+                document.getElementById('status-msg').style.color = "red";
+            }
+
+            // Auto Next
+            setTimeout(() => {
+                if(qIdx < currentSet.length - 1) nextQ();
+            }, 2000);
+        }
+
+        function nextQ() {
+            if(qIdx < currentSet.length - 1) {
+                qIdx++;
+                loadQ();
+            } else {
+                submitQuiz();
             }
         }
-    </script>
 
+        function prevQ() {
+            if(qIdx > 0) {
+                qIdx--;
+                loadQ();
+            }
+        }
+
+        function submitQuiz() {
+            let attempted = Object.keys(userAns).length;
+            if(!confirm(`आपने ${attempted} सवाल किए हैं। Submit करें?`)) return;
+
+            let score = 0;
+            let reviewHTML = "";
+
+            currentSet.forEach((item, idx) => {
+                let u = userAns[idx];
+                if(u === item.a) {
+                    score++;
+                } else {
+                    let wrongTxt = (u !== undefined) ? item.o[u] : "छोड़ दिया";
+                    reviewHTML += `<div style="background:#fff3cd; padding:10px; margin-bottom:5px; border-radius:5px;">
+                        <small><b>Q${idx+1}:</b> ${item.q}</small><br>
+                        <span style="color:red">❌ आपका: ${wrongTxt}</span><br>
+                        <span style="color:green">✅ सही: ${item.o[item.a]}</span>
+                    </div>`;
+                }
+            });
+
+            document.getElementById('final-score').innerText = score;
+            document.getElementById('total-qs').innerText = currentSet.length;
+            document.getElementById('review-list').innerHTML = reviewHTML || "<p>अद्भुत! सब सही हैं।</p>";
+            show('screen-4');
+        }
+
+        function shareWA() {
+            let txt = `मैंने ${document.getElementById('final-score').innerText} स्कोर किया! आप भी दीजिये: ${window.location.href}`;
+            window.open("https://wa.me/?text=" + encodeURIComponent(txt));
+        }
+
+        function show(id) {
+            ['screen-1', 'screen-2', 'screen-3', 'screen-4'].forEach(s => document.getElementById(s).classList.add('hide-screen'));
+            document.getElementById(id).classList.remove('hide-screen');
+        }
+        function goHome() { show('screen-1'); }
+        function playSound(id) { document.getElementById(id).play().catch(e=>{}); }
+
+    </script>
 </div>
-<!-- END OF DEMO QUIZ -->
